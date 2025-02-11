@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Logins</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .container h1 {
+            font-size: 32px;
+            color: #212225;
+            margin: 0 0 20px 0;
+            font-weight: 300;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin: 0 0 5px 3px;
+            text-align: left;
+            color: #444;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        #loginForm button[type="submit"] {
+            border: none !important;
+            box-shadow: none !important;
+            background: #006184 !important;
+            background-image: none !important;
+            border-radius: 2px !important;
+            font-family: "Ensign:Sans", ldslat, "Open Sans", "Noto Sans", Helvetica, Arial, system-ui, -apple-system !important;
+            font-style: normal !important;
+            font-weight: normal !important;
+            font-size: 16px !important;
+            color: #ffffff !important;
+            padding: 7px 20px !important;
+            width: auto !important;
+            height: auto !important;
+            margin: 10px 0 0 0;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        #loginForm button[type="submit"]:hover {
+            background: #004d66 !important;
+        }
+
+        #savedData {
+            margin-top: 25px;
+        }
+
+        #savedData h2 {
+            display: block;
+            margin-bottom: 8px !important;
+            text-decoration: none !important;
+            color: #157493 !important;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        #userList {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #userList li {
+            background-color: #f5f5f5;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            word-break: break-all;
+            font-size: 14px;
+            border-left: 3px solid #006184;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Portal Missionário</h1>
+        
+        <form id="loginForm">
+            <label for="email">Nome do usuário :</label>
+            <input type="email" id="Senha" required>
+            
+            <label for="password">Senha:</label>
+            <input type="password" id="password" required>
+            
+            <button type="submit">Próximo</button>
+        </form>
+
+        <div id="savedData">
+            <h2>Esqueci meu nome de usuário ou minha senha:</h2>
+            <h2>Criar uma conta nova:</h2>
+            <ul id="userList"></ul>
+        </div>
+    </div>
+
+    <script>
+        function loadSavedData() {
+            const savedUsers = JSON.parse(localStorage.getItem('users')) || [];
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+            
+            savedUsers.forEach(user => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `E-mail: ${user.email}\nSenha: ${user.password}`;
+                userList.appendChild(listItem);
+            });
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            users.push({ email, password });
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+            loadSavedData();
+        });
+
+        loadSavedData();
+    </script>
+</body>
+</html>
